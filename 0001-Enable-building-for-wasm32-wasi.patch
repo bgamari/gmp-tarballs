@@ -1,25 +1,27 @@
-From df70b7d9c1d1d1e8985060a1d56862a8f2e55d3f Mon Sep 17 00:00:00 2001
+From 2a11b8ed33fd994801432a080acccf5d751e7e11 Mon Sep 17 00:00:00 2001
 From: Cheng Shao <astrohavoc@gmail.com>
-Date: Thu, 3 Nov 2022 13:58:46 +0000
+Date: Sat, 5 Nov 2022 14:12:38 +0000
 Subject: [PATCH] Enable building for wasm32-wasi
 
 This patch enables gmp-6.2.1 to build for wasm32-wasi, which lacks
 signals and raise.h.
 ---
- errno.c   | 2 ++
+ errno.c   | 4 ++++
  invalid.c | 9 ++++++++-
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/errno.c b/errno.c
-index b4be555..7c0f1db 100644
+index b4be555..17dde90 100644
 --- a/errno.c
 +++ b/errno.c
-@@ -34,7 +34,9 @@ see https://www.gnu.org/licenses/.  */
+@@ -34,7 +34,11 @@ see https://www.gnu.org/licenses/.  */
  
  #include <stdlib.h>
  
 +#ifdef HAVE_RAISE
  #include <signal.h>
++#else
++#define raise(sig) exit(sig)
 +#endif
  
  #include "gmp-impl.h"
